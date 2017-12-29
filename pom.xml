@@ -11,6 +11,6 @@
 
     <modules>
         <module>account-service</module>
+        <module>discovery-service</module>
     </modules>
-
 </project>
