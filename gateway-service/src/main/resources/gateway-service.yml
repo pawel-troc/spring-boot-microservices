@@ -1,9 +1,9 @@
 server:
-  port: ${PORT:2222}
+  port: ${PORT:8765}
 
 spring:
   application:
-    name: account-service
+    name: gateway-service
   logging:
     pattern:
       console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
@@ -11,13 +11,23 @@ spring:
       org.springframework: WARN
       org.hibernate: WARN
 
+zuul:
+  prefix: /api
+  routes:
+    account:
+      path: /account/**
+      serviceId: account-service
+    customer:
+      path: /customer/**
+      serviceId: customer-service
+
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761}/eureka/
   instance:
     leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
 
 ribbon:
   eureka:
