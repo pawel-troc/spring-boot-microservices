@@ -11,6 +11,7 @@ import pl.ptroc.microservices.customerservice.model.Customer;
 import pl.ptroc.microservices.customerservice.repository.CustomerRepository;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by Paweł Troć on 2017-12-29.
@@ -18,6 +19,8 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/customer")
 public class CustomerController {
+
+    private Logger logger = Logger.getLogger(CustomerController.class.getName());
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -32,6 +35,7 @@ public class CustomerController {
 
     @GetMapping("/{customerId}")
     public Customer getCustomerById(@PathVariable("customerId") Long customerId) {
+        logger.info(String.format("Get data for customer(%s)", customerId));
         Customer customer = customerRepository.findOne(customerId);
         List<AccountDTO> accountDTOList = accountClient.getAccountsForCustomer(customerId);
         customer.setAccountsList(accountDTOList);
